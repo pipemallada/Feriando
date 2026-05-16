@@ -12,6 +12,10 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * manejo centralizado de excepciones para ms-calificacion.
+ * mismo formato uniforme que el resto de microservicios.
+ */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 

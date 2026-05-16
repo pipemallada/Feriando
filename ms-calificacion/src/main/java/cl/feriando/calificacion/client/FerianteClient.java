@@ -9,6 +9,14 @@ import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.Map;
 
+/**
+ * Cliente HTTP hacia ms-feriante.
+ *
+ * unico metodo: PATCH para empujar
+ * el nuevo promedio (calculado aqui) a ms-feriante. Devuelve boolean para
+ * que el service decida si tratar el fallo como critico o no.
+ */
+
 @Component
 public class FerianteClient {
 
@@ -20,11 +28,15 @@ public class FerianteClient {
     public FerianteClient(WebClient ferianteWebClient) {
         this.client = ferianteWebClient;
     }
-
+    /**
+     * empuja el nuevo promedio al ms-feriante. si falla, log y false
+     * (no propagamos: la calificacion local ya esta creada).
+     */
     public boolean actualizarPromedio(Long idFeriante, BigDecimal nuevoPromedio) {
         try {
             client.patch()
                     .uri("/feriantes/{id}/calificacion-promedio", idFeriante)
+                    // Map.of() para no crear un DTO solo para 1 campo.
                     .bodyValue(Map.of("promedio", nuevoPromedio))
                     .retrieve()
                     .toBodilessEntity()

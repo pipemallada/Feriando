@@ -7,7 +7,10 @@ import cl.feriando.calificacion.model.Calificacion;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-
+/**
+ * mapper de calificacion
+ * sin updateentity porque las calificaciones no se actualizan
+ */
 @Component
 public class CalificacionMapper {
 

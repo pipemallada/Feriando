@@ -9,6 +9,11 @@ import jakarta.persistence.Table;
 
 import java.time.LocalDateTime;
 
+/**
+ * entidad JPA de la calificacion.
+ * regla 1 a 1 entre calificacion y pedido. un cliente sólo puede calificar
+ * cada pedido UNA vez.
+ */
 @Entity
 @Table(name = "calificaciones")
 public class Calificacion {
@@ -18,12 +23,13 @@ public class Calificacion {
     @Column(name = "id_calificacion")
     private Long idCalificacion;
 
+    // unique=true: un pedido = una sola calificacion.
     @Column(name = "id_pedido", nullable = false, unique = true)
     private Long idPedido;
-
+    // quién califico.
     @Column(name = "id_cliente", nullable = false)
     private Long idCliente;
-
+    // a quien se califico.
     @Column(name = "id_feriante", nullable = false)
     private Long idFeriante;
 

@@ -5,6 +5,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.client.WebClient;
 
+/**
+ * configura el WebClient hacia ms-feriante (para actualizar el promedio
+ * cuando se crea/elimina una calificacion).
+ */
 @Configuration
 public class WebClientConfig {
 

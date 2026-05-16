@@ -11,7 +11,14 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
-
+/**
+ * manejo centralizado de excepciones del microservicio.
+ * mantiene los controladores limpios y enfocados en la logica.
+ * garantiza una forma unica de error en todoo el microservicio.
+ *
+ * @RestControllerAdvice = @ControllerAdvice + @ResponseBody. intercepta
+ * excepciones de todos los @RestController y devuelve el body como JSON.
+ */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
