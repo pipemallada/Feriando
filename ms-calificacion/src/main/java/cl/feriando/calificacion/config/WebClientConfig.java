@@ -11,7 +11,7 @@ import org.springframework.web.reactive.function.client.WebClient;
  */
 @Configuration
 public class WebClientConfig {
-
+    // URL parametrizada en application.properties para poder cambiarla sin recompilar.
     @Bean
     public WebClient ferianteWebClient(@Value("${feriando.ms-feriante.url}") String url) {
         return WebClient.builder().baseUrl(url).build();

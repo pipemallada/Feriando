@@ -13,6 +13,6 @@ public interface CalificacionRepository extends JpaRepository<Calificacion, Long
     // lo usamos para listar todas las opiniones del feriante X y para
     // recalcular su promedio cuando se crea o se borra una calificacion.
     List<Calificacion> findByIdFeriante(Long idFeriante);
-    // para prevenir duplicados. un pedido sólo puede calificarse una vez.
+    // para prevenir duplicados. un pedido solo puede calificarse una vez.
     boolean existsByIdPedido(Long idPedido);
 }

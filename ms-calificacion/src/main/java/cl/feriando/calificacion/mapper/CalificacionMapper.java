@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
  */
 @Component
 public class CalificacionMapper {
-
+    // DTO -> entidad. La fecha la fija el sistema (now).
     public Calificacion toEntity(CalificacionRequestDTO dto) {
         Calificacion c = new Calificacion();
         c.setIdPedido(dto.idPedido());
@@ -24,7 +24,7 @@ public class CalificacionMapper {
         c.setFecha(LocalDateTime.now());
         return c;
     }
-
+    // entidad -> DTO de salida.
     public CalificacionResponseDTO toResponse(Calificacion c) {
         return new CalificacionResponseDTO(
                 c.getIdCalificacion(),

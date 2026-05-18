@@ -32,10 +32,10 @@ public class Calificacion {
     // a quien se califico.
     @Column(name = "id_feriante", nullable = false)
     private Long idFeriante;
-
+    // short en Java = SMALLINT en Postgres. Rango efectivo 1..5 validado en el DTO.
     @Column(name = "puntaje", nullable = false)
     private Short puntaje;
-
+    // comentario libre, opcional. TEXT para no limitar el largo.
     @Column(name = "comentario", columnDefinition = "TEXT")
     private String comentario;
 

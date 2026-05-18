@@ -49,7 +49,7 @@ public class CalificacionController {
     public ResponseEntity<CalificacionResponseDTO> obtener(@PathVariable Long id) {
         return ResponseEntity.ok(service.obtener(id));
     }
-    // POST: crea la calificación y lanza el recalculo del promedio.
+    // POST: crea la calificacion y lanza el recalculo del promedio.
 
     @PostMapping
     public ResponseEntity<CalificacionResponseDTO> crear(@Valid @RequestBody CalificacionRequestDTO dto) {
