@@ -5,10 +5,12 @@ import cl.feriando.despacho.dto.DespachoResponseDTO;
 import cl.feriando.despacho.model.Despacho;
 
 import org.springframework.stereotype.Component;
-
+/**
+ * mapper de despacho. sin calculos derivados (a diferencia del de carrito).
+ */
 @Component
 public class DespachoMapper {
-
+    // Nuevo despacho: estado inicial = PENDIENTE, fechaEntrega queda null.
     public Despacho toEntity(DespachoRequestDTO dto) {
         Despacho d = new Despacho();
         d.setIdPedido(dto.idPedido());
@@ -19,7 +21,7 @@ public class DespachoMapper {
         d.setFechaEstimada(dto.fechaEstimada());
         return d;
     }
-
+    // Entidad -> DTO.
     public DespachoResponseDTO toResponse(Despacho d) {
         return new DespachoResponseDTO(
                 d.getIdDespacho(),
@@ -32,7 +34,8 @@ public class DespachoMapper {
                 d.getFechaEntrega()
         );
     }
-
+    // Update: NO tocamos id_pedido (1:1 inmutable) ni los campos de estado
+    // y fecha_entrega (que tienen su propio endpoint de cambio de estado).
     public void updateEntity(Despacho d, DespachoRequestDTO dto) {
         d.setTipoEntrega(dto.tipoEntrega());
         d.setDireccion(dto.direccion());

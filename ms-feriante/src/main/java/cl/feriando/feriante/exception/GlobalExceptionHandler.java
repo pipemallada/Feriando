@@ -11,24 +11,29 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
-
+/**
+ * manejo centralizado de excepciones de ms-feriante.
+ * estructura identica a la de ms-usuario. mantener el
+ * mismo formato de error en todos los microservicios facilita que el frontend
+ * use un solo parseador.
+ */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-
+    // logger por clase para identificar rapido el origen del mensaje.
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
-
+    // 404 cuando el feriante pedido no existe.
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<Map<String, Object>> handleNotFound(ResourceNotFoundException ex) {
         log.warn("Recurso no encontrado: {}", ex.getMessage());
         return build(HttpStatus.NOT_FOUND, ex.getMessage());
     }
-
+    // 400 para violaciones de reglas (ej. usuario ya tiene feriante).
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<Map<String, Object>> handleBusiness(BusinessException ex) {
         log.warn("Regla de negocio violada: {}", ex.getMessage());
         return build(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
-
+    // 400 con mapa de errores por campo. lo dispara @Valid en los controllers.
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> handleValidation(MethodArgumentNotValidException ex) {
         Map<String, String> errores = new HashMap<>();
@@ -40,17 +45,17 @@ public class GlobalExceptionHandler {
         body.put("errores", errores);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
     }
-
+    // 500 catch-all. evita exponer el stacktrace al cliente.
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, Object>> handleGeneric(Exception ex) {
         log.error("Error no controlado", ex);
         return build(HttpStatus.INTERNAL_SERVER_ERROR, "Error interno del servidor");
     }
-
+    // helper: arma el ResponseEntity con el body uniforme.
     private ResponseEntity<Map<String, Object>> build(HttpStatus status, String message) {
         return ResponseEntity.status(status).body(baseBody(status, message));
     }
-
+    // helper: define el shape JSON comun a todos los errores.
     private Map<String, Object> baseBody(HttpStatus status, String message) {
         Map<String, Object> body = new HashMap<>();
         body.put("timestamp", LocalDateTime.now());

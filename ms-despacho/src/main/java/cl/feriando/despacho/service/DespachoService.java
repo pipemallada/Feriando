@@ -16,7 +16,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
+/**
+ * logica de negocio del despacho.
+ * 1 pedido = 1 despacho (rechazamos duplicados con BusinessException).
+ *  si es domicilio, la direccion es obligatoria (lo valida el service
+ * porque el DTO no puede expresar "obligatorio segun otro campo").
+ * al transicionar a entregado, fijamos fecha_entrega automaticamente.
+ */
 @Service
 public class DespachoService {
 
@@ -39,7 +45,7 @@ public class DespachoService {
     public DespachoResponseDTO obtener(Long id) {
         return mapper.toResponse(buscarPorId(id));
     }
-
+    // permite "ver el despacho del pedido X" sin tener su id_despacho.
     @Transactional(readOnly = true)
     public DespachoResponseDTO obtenerPorPedido(Long idPedido) {
         Despacho d = repository.findByIdPedido(idPedido)
@@ -50,9 +56,13 @@ public class DespachoService {
 
     @Transactional
     public DespachoResponseDTO crear(DespachoRequestDTO dto) {
+        // regla 1. un pedido solo puede tener un despacho.
         if (repository.existsByIdPedido(dto.idPedido())) {
             throw new BusinessException("El pedido " + dto.idPedido() + " ya tiene un despacho asignado");
         }
+        // egla 2. para domicilio la direccion es obligatoria.
+        // esto es una validacion condicional que no se puede expresar con
+        // Bean Validation estandar, asi que va aqui.
         if ("DOMICILIO".equalsIgnoreCase(dto.tipoEntrega())
                 && (dto.direccion() == null || dto.direccion().isBlank())) {
             throw new BusinessException("La dirección es obligatoria para entrega a domicilio");
@@ -69,6 +79,12 @@ public class DespachoService {
         log.info("Despacho actualizado id={}", id);
         return mapper.toResponse(repository.save(d));
     }
+    /**
+     * cambia el estado del despacho.
+     * efecto colateral: si pasamos a entregado, registramos automaticamente
+     * la fecha actual como fecha_entrega. esto es logica de negocio (no
+     * pertenece al mapper) porque depende del valor del nuevo estado.
+     */
 
     @Transactional
     public DespachoResponseDTO cambiarEstado(Long id, CambioEstadoDespachoDTO dto) {
@@ -86,7 +102,7 @@ public class DespachoService {
         repository.delete(buscarPorId(id));
         log.info("Despacho eliminado id={}", id);
     }
-
+    // helper centralizado: o devuelve la entidad, o lanza 404.
     private Despacho buscarPorId(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Despacho " + id + " no encontrado"));

@@ -41,7 +41,8 @@ public class DespachoController {
     public ResponseEntity<DespachoResponseDTO> obtener(@PathVariable Long id) {
         return ResponseEntity.ok(service.obtener(id));
     }
-
+    // GET /despachos/pedido/{idPedido}: via rapida para que el frontend o
+    // ms-pedido consulten el despacho asociado a un pedido.
     @GetMapping("/pedido/{idPedido}")
     public ResponseEntity<DespachoResponseDTO> obtenerPorPedido(@PathVariable Long idPedido) {
         return ResponseEntity.ok(service.obtenerPorPedido(idPedido));
@@ -57,7 +58,7 @@ public class DespachoController {
                                                           @Valid @RequestBody DespachoRequestDTO dto) {
         return ResponseEntity.ok(service.actualizar(id, dto));
     }
-
+    // PATCH para la transicion de estado (PENDIENTE -> EN_RUTA -> ENTREGADO).
     @PatchMapping("/{id}/estado")
     public ResponseEntity<DespachoResponseDTO> cambiarEstado(@PathVariable Long id,
                                                              @Valid @RequestBody CambioEstadoDespachoDTO dto) {

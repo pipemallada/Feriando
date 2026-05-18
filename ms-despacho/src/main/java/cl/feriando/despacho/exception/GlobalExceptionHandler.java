@@ -12,23 +12,27 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * manejo centralizado de excepciones para ms-despacho.
+ * misma estructura y formato JSON que en el resto de microservicios.
+ */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
-
+    // 404: despacho inexistente.
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<Map<String, Object>> handleNotFound(ResourceNotFoundException ex) {
         log.warn("Recurso no encontrado: {}", ex.getMessage());
         return build(HttpStatus.NOT_FOUND, ex.getMessage());
     }
-
+    // 400: ej. direccion faltante para DOMICILIO.
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<Map<String, Object>> handleBusiness(BusinessException ex) {
         log.warn("Regla de negocio violada: {}", ex.getMessage());
         return build(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
-
+    // 400 con detalle por campo del DTO.
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> handleValidation(MethodArgumentNotValidException ex) {
         Map<String, String> errores = new HashMap<>();
@@ -40,13 +44,13 @@ public class GlobalExceptionHandler {
         body.put("errores", errores);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
     }
-
+    // 500 catch-all.
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, Object>> handleGeneric(Exception ex) {
         log.error("Error no controlado", ex);
         return build(HttpStatus.INTERNAL_SERVER_ERROR, "Error interno del servidor");
     }
-
+    // Helpers de body uniforme.
     private ResponseEntity<Map<String, Object>> build(HttpStatus status, String message) {
         return ResponseEntity.status(status).body(baseBody(status, message));
     }
