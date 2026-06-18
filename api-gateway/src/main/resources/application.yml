@@ -1,0 +1,91 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: ms-usuario
+              uri: https://ms-usuario-472382576783.southamerica-west1.run.app
+              predicates:
+                - Path=/api/usuarios/**
+              filters:
+                - StripPrefix=1
+
+            - id: ms-feriante
+              uri: https://ms-feriante-472382576783.southamerica-west1.run.app
+              predicates:
+                - Path=/api/feriantes/**
+              filters:
+                - StripPrefix=1
+
+            - id: ms-producto
+              uri: https://ms-producto-472382576783.southamerica-west1.run.app
+              predicates:
+                - Path=/api/productos/**
+              filters:
+                - StripPrefix=1
+
+            - id: ms-categoria
+              uri: https://ms-producto-472382576783.southamerica-west1.run.app
+              predicates:
+                - Path=/api/categorias/**
+              filters:
+                - StripPrefix=1
+
+            - id: ms-inventario
+              uri: https://ms-inventario-472382576783.southamerica-west1.run.app
+              predicates:
+                - Path=/api/inventario/**
+              filters:
+                - StripPrefix=1
+
+            - id: ms-carrito
+              uri: https://ms-carrito-472382576783.southamerica-west1.run.app
+              predicates:
+                - Path=/api/carritos/**
+              filters:
+                - StripPrefix=1
+
+            - id: ms-pedido
+              uri: https://ms-pedido-472382576783.southamerica-west1.run.app
+              predicates:
+                - Path=/api/pedidos/**
+              filters:
+                - StripPrefix=1
+
+            - id: ms-despacho
+              uri: https://ms-despacho-472382576783.southamerica-west1.run.app
+              predicates:
+                - Path=/api/despachos/**
+              filters:
+                - StripPrefix=1
+
+            - id: ms-pago
+              uri: https://ms-pago-472382576783.southamerica-west1.run.app
+              predicates:
+                - Path=/api/pagos/**
+              filters:
+                - StripPrefix=1
+
+            - id: ms-calificacion
+              uri: https://ms-calificacion-472382576783.southamerica-west1.run.app
+              predicates:
+                - Path=/api/calificaciones/**
+              filters:
+                - StripPrefix=1
+
+            - id: ms-reporte
+              uri: https://ms-reporte-472382576783.southamerica-west1.run.app
+              predicates:
+                - Path=/api/reportes/**
+              filters:
+                - StripPrefix=1
+
+server:
+  port: 8080
+
+logging:
+  level:
+    org.springframework.cloud.gateway: INFO
