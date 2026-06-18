@@ -11,7 +11,7 @@ on:
 env:
   PROJECT_ID: feriando-499722
   REGION: southamerica-west1
-  REPO_NAME: mis-microservicios
+  REPO_NAME: microservicios-feriando
 
 jobs:
   deploy-gateway:
