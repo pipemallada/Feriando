@@ -1,18 +1,19 @@
-name: Deploy MS Usuario
+name: Deploy MS Feriante
 
 on:
   push:
     branches:
       - main
     paths:
-      - 'ms-usuario/**' #1 cambiar nombre de cada microsrevicio
-      - '.github/workflows/deploy-ms-usuario.yml' #2 cambiar el nombre de este archivo
+      - 'ms-feriante/**'
+      - '.github/workflows/deploy-ms-feriante.yml'
 
 env:
   PROJECT_ID: feriando-499722
   REGION: southamerica-west1
   REPO_NAME: microservicios-feriando
-  SERVICE_NAME: ms-usuario #3 cambiar el nombre de tu microservicio
+  SERVICE_NAME: ms-feriante
+
 
 
   DB_INSTANCE: feriando-499722:southamerica-west1:feriando
@@ -55,9 +56,9 @@ jobs:
           service: ${{ env.SERVICE_NAME }}
           region: ${{ env.REGION }}
           image: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}/${{ env.SERVICE_NAME }}:${{ github.sha }}
+          # Inyectamos la base de datos y las variables de entorno:
           flags: '--add-cloudsql-instances=${{ env.DB_INSTANCE }} --allow-unauthenticated'
           env_vars: |-
-              DB_URL=jdbc:postgresql:///feriando_db?cloudSqlInstance=${{ env.DB_INSTANCE }}&socketFactory=com.google.cloud.sql.postgres.SocketFactory&currentSchema=usuario_schema
-              DB_USER=postgres
-              DB_PASS=Pipelolaturri2810.
-          #aqui en db url hay que cambiar al final el nombre del schema
+           DB_URL=jdbc:postgresql:///feriando_db?cloudSqlInstance=${{ env.DB_INSTANCE }}&socketFactory=com.google.cloud.sql.postgres.SocketFactory&currentSchema=feriante_schema
+           DB_USER=postgres
+           DB_PASS=Pipelolaturri2810.
