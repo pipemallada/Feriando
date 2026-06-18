@@ -52,5 +52,3 @@ jobs:
           region: ${{ env.REGION }}
           image: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}/api-gateway:${{ github.sha }}
           flags: '--allow-unauthenticated'
-          env_vars: |-
-            PORT=8080
